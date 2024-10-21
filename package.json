@@ -12,7 +12,8 @@
     "lint": "eslint . --fix"
   },
   "dependencies": {
-    "vue": "^3.5.12"
+    "vue": "^3.5.12",
+    "vue-icons-plus": "^0.1.6"
   },
   "devDependencies": {
     "@tsconfig/node20": "^20.1.4",

@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { ref, onMounted } from "vue";
 import Navbar from "./components/Navbar.vue";
+import { EpDelete } from "vue-icons-plus/ep";
 
 interface Todo {
   userId: number;
@@ -16,9 +17,21 @@ const onSubmit = () => {
   console.log(todoList.value);
 };
 
+const checkTodo = (id: number) => {
+  todoList.value = todoList.value.map((todo) => {
+    if (todo.id === id) {
+      return {
+        ...todo,
+        completed: !todo.completed,
+      };
+    }
+    return todo;
+  });
+};
+
 onMounted(async () => {
   const response = await fetch(
-    "https://jsonplaceholder.typicode.com/todos?_limit=5"
+    "https://jsonplaceholder.typicode.com/todos?_limit=3"
   );
   const data = await response.json();
   todoList.value = data;
@@ -47,14 +60,31 @@ onMounted(async () => {
   </div>
 
   <!-- Todo Lists here -->
-
+  {{ console.log(todoList) }}
   <div
     v-for="todo in todoList"
     :key="todo.id"
-    class="flex flex-col items-center justify-center w-1/2 mx-auto"
+    class="flex flex-col items-center justify-center w-2/3 mx-auto"
   >
-    <div class="border border-solid border-gray-400 p-2 rounded-md w-full">
-      {{ todo.title }}
+    <div
+      class="bg-slate-50 border border-solid border-green-400 p-2 rounded-md w-full my-2 flex justify-between items-center"
+    >
+      <div class="space-x-2">
+        <input
+          class="size-4 text-blue-500 focus:ring-blue-500"
+          type="checkbox"
+          :id="'todo-' + todo.id"
+          v-model="todo.completed"
+        />
+        <label
+          :for="'todo-' + todo.id"
+          class="text-gray-800"
+          :class="{ 'line-through': todo.completed }"
+          >{{ todo.title }}</label
+        >
+      </div>
+
+      <EpDelete class="size-6 text-red-600 cursor-pointer" />
     </div>
   </div>
 </template>
